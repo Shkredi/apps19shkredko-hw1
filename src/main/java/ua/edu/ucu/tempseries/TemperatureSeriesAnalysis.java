@@ -5,6 +5,7 @@ import java.util.InputMismatchException;
 
 public class TemperatureSeriesAnalysis {
 
+    private final static int minTemp = -237;
     private double[] temperatureSeries;
     private int length;
 
@@ -14,17 +15,18 @@ public class TemperatureSeriesAnalysis {
     }
 
     public TemperatureSeriesAnalysis(double[] temperatureSeries) {
-        for(double t:temperatureSeries){
-            if (t < -237){
+        for (double t: temperatureSeries) {
+            if (t < minTemp) {
                 throw new InputMismatchException();
             }
         }
-        this.temperatureSeries = Arrays.copyOf(temperatureSeries, temperatureSeries.length);
+        this.temperatureSeries = Arrays.copyOf(temperatureSeries,
+                                                temperatureSeries.length);
         this.length = temperatureSeries.length;
     }
 
-    private void emptyError(){
-        if (this.length == 0){
+    private void emptyError() {
+        if (this.length == 0) {
             throw  new IllegalArgumentException();
         }
     }
@@ -43,7 +45,7 @@ public class TemperatureSeriesAnalysis {
         double s = 0;
         double a = this.average();
         for (double t: this.temperatureSeries) {
-            s += Math.pow(t-a, 2);
+            s += (t-a)*(t-a);
         }
         return Math.sqrt(s/this.length);
     }
@@ -52,7 +54,7 @@ public class TemperatureSeriesAnalysis {
         this.emptyError();
         double m = Integer.MAX_VALUE;
         for (double t: this.temperatureSeries) {
-            if (t < m){
+            if (t < m) {
                 m = t;
             }
         }
@@ -63,7 +65,7 @@ public class TemperatureSeriesAnalysis {
         this.emptyError();
         double m = Integer.MIN_VALUE;
         for (double t: this.temperatureSeries) {
-            if (t > m){
+            if (t > m) {
                 m = t;
             }
         }
@@ -80,7 +82,7 @@ public class TemperatureSeriesAnalysis {
         double m = Integer.MAX_VALUE;
         for (int i = 0; i < this.length; i++) {
             double d = Math.abs(this.temperatureSeries[i] - tempValue);
-            if (d < m){
+            if (d < m) {
                 mi = i;
                 m = d;
             }
@@ -93,7 +95,7 @@ public class TemperatureSeriesAnalysis {
         double[] tempSeries = new double[this.length];
         int n = 0;
         for (double t: this.temperatureSeries) {
-            if (t < tempValue){
+            if (t < tempValue) {
                 tempSeries[n] = t;
                 n++;
             }
@@ -106,7 +108,7 @@ public class TemperatureSeriesAnalysis {
         double[] tempSeries = new double[this.length];
         int n = 0;
         for (double t: this.temperatureSeries) {
-            if (t > tempValue){
+            if (t > tempValue) {
                 tempSeries[n] = t;
                 n++;
             }
@@ -124,6 +126,11 @@ public class TemperatureSeriesAnalysis {
     }
 
     public int addTemps(double... temps) {
+        for (double t: temps) {
+            if (t < minTemp) {
+                throw new InputMismatchException();
+            }
+        }
         int newLength = this.length + temps.length;
         double[] tempSeries = new double[newLength];
         for (int i = 0; i < this.length; i++) {

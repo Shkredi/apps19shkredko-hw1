@@ -122,4 +122,8 @@ public class TemperatureSeriesAnalysisTest {
         assertEquals(7, newl);
     }
 
+    @Test(expected = InputMismatchException.class)
+    public void addTempsNull() {
+        int newl = t1.addTemps(53.5, -300);
+    }
 }
